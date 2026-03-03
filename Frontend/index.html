@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather Shield</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #f4f4f4; }
+        .card { background: white; padding: 20px; border-radius: 10px; display: inline-block; margin-top: 50px; shadow: 2px 2px 10px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Weather Dashboard</h1>
+        <div id="content">Loading weather data...</div>
+        <button onclick="fetchWeather()">Refresh</button>
+    </div>
+
+    <script>
+        async function fetchWeather() {
+            try {
+                // Pointing to localhost:5000 because that's where we map the backend container
+                const response = await fetch('http://localhost:5000/api/weather');
+                const data = await response.json();
+                document.getElementById('content').innerHTML = `
+                    <h3>City: ${data.city}</h3>
+                    <p>Temp: ${data.temp}°C</p>
+                    <p>Condition: ${data.condition}</p>
+                `;
+            } catch (err) {
+                document.getElementById('content').innerHTML = "Error: Backend unreachable!";
+            }
+        }
+        fetchWeather();
+    </script>
+</body>
+</html>
